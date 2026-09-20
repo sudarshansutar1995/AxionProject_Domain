@@ -40,16 +40,63 @@ steps:
   displayName: 'Check Schema Files'
 
 
+
 # =========================================================
-# 4. Apply Telemetry Schema
+# 4. Show Telemetry Table Structure
 # =========================================================
 - script: |
-    echo "Applying 02-telemetry.sql..."
+    echo "===== TELEMETRY TABLE STRUCTURE ====="
 
     psql ^
       "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
       -v ON_ERROR_STOP=1 ^
-      -f "$(Build.SourcesDirectory)\axion-database-schema\02-telemetry.sql"
-  displayName: 'Apply Telemetry Schema'
+      -c "\d+ telemetry"
+  displayName: 'Show Telemetry Table Structure'
+  env:
+    PGPASSWORD: $(POSTGRES_PASSWORD)
+
+
+# =========================================================
+# 5. Show Telemetry Columns
+# =========================================================
+- script: |
+    echo "===== TELEMETRY COLUMNS ====="
+
+    psql ^
+      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
+      -v ON_ERROR_STOP=1 ^
+      -c "SELECT ordinal_position, column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_schema='public' AND table_name='telemetry' ORDER BY ordinal_position;"
+  displayName: 'Show Telemetry Columns'
+  env:
+    PGPASSWORD: $(POSTGRES_PASSWORD)
+
+
+# =========================================================
+# 6. Show Telemetry Data
+# =========================================================
+- script: |
+    echo "===== TELEMETRY DATA ====="
+
+    psql ^
+      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
+      -v ON_ERROR_STOP=1 ^
+      -c "SELECT * FROM telemetry LIMIT 20;"
+  displayName: 'Show Telemetry Data'
+  env:
+    PGPASSWORD: $(POSTGRES_PASSWORD)
+
+
+# 
+# =========================================================
+# 7. List All Tables
+# =========================================================
+- script: |
+    echo "===== ALL PUBLIC TABLES ====="
+
+    psql ^
+      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
+      -v ON_ERROR_STOP=1 ^
+      -c "\dt public.*"
+  displayName: 'List PostgreSQL Tables'
   env:
     PGPASSWORD: $(POSTGRES_PASSWORD)
