@@ -31,4 +31,28 @@ steps:
   env:
     PGPASSWORD: $(POSTGRES_PASSWORD)
 
+# =========================================================
+# 3. Check Schema File
+# =========================================================
+- script: |
+    echo "Checking schema file..."
+    dir "$(Build.SourcesDirectory)\axion-database-schema"
+  displayName: 'Check Schema File'
+
+
+# =========================================================
+# 4. Apply Database Schema
+# =========================================================
+- script: |
+    echo "Applying PostgreSQL schema..."
+
+    psql ^
+      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
+      -v ON_ERROR_STOP=1 ^
+      -f "$(Build.SourcesDirectory)\axion-database-schema\*.sql"
+  displayName: 'Apply PostgreSQL Schema'
+  env:
+    PGPASSWORD: $(POSTGRES_PASSWORD)
+
+
 
