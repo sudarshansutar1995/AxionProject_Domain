@@ -41,22 +41,7 @@ steps:
 
 
 # =========================================================
-# 4. Apply Extensions Schema
-# =========================================================
-- script: |
-    echo "Applying 01-extensions.sql..."
-
-    psql ^
-      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
-      -v ON_ERROR_STOP=1 ^
-      -f "$(Build.SourcesDirectory)\axion-database-schema\01-extensions.sql"
-  displayName: 'Apply Extensions Schema'
-  env:
-    PGPASSWORD: $(POSTGRES_PASSWORD)
-
-
-# =========================================================
-# 5. Apply Telemetry Schema
+# 4. Apply Telemetry Schema
 # =========================================================
 - script: |
     echo "Applying 02-telemetry.sql..."
