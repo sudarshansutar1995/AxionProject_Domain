@@ -1,25 +1,79 @@
+trigger:
+- main
+
 pool:
   name: sudarshancicd
 
 steps:
 
-# 1. Check PostgreSQL client
+# =========================================================
+# 1. Check PostgreSQL Client
+# =========================================================
 - script: |
     echo "Checking PostgreSQL client..."
+    where psql
     psql --version
   displayName: 'Check PostgreSQL Client'
 
 
-# 2. Test PostgreSQL connection
+# =========================================================
+# 2. Test PostgreSQL Connection
+# =========================================================
 - script: |
     echo "Testing PostgreSQL connection..."
 
-    PGPASSWORD="$(Akkalkot@413216)" psql \
-      -h "sudarshan-kubernate.postgres.database.azure.com" \
-      -p 5432 \
-      -U "sudarshan" \
-      -d "axion-db" \
-      -v ON_ERROR_STOP=1 \
+    psql ^
+      -h "sudarshan-kubernate.postgres.database.azure.com" ^
+      -p 5432 ^
+      -U "sudarshan" ^
+      -d "axion-db" ^
+      -v ON_ERROR_STOP=1 ^
       -c "SELECT current_database(), current_user;"
   displayName: 'Test PostgreSQL Connection'
+  env:
+    PGPASSWORD: $(POSTGRES_PASSWORD)
 
+
+# =========================================================
+# 3. Check Schema File
+# =========================================================
+- script: |
+    echo "Checking schema file..."
+    dir "$(Build.SourcesDirectory)\database"
+  displayName: 'Check Schema File'
+
+
+# =========================================================
+# 4. Apply PostgreSQL Schema
+# =========================================================
+- script: |
+    echo "Applying PostgreSQL schema..."
+
+    psql ^
+      -h "sudarshan-kubernate.postgres.database.azure.com" ^
+      -p 5432 ^
+      -U "sudarshan" ^
+      -d "axion-db" ^
+      -v ON_ERROR_STOP=1 ^
+      -f "$(Build.SourcesDirectory)\database\schema.sql"
+  displayName: 'Apply PostgreSQL Schema'
+  env:
+    PGPASSWORD: $(POSTGRES_PASSWORD)
+
+
+# =========================================================
+# 5. Verify Database
+# =========================================================
+- script: |
+    echo "Verifying database..."
+
+    psql ^
+      -h "sudarshan-kubernate.postgres.database.azure.com" ^
+      -p 5432 ^
+      -U "sudarshan" ^
+      -d "axion-db" ^
+      -v ON_ERROR_STOP=1 ^
+      -c "\dt"
+  displayName: 'Verify Database Tables'
+  env:
+    PGPASSWORD: $(POSTGRES_PASSWORD)
