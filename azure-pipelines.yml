@@ -24,7 +24,7 @@ steps:
     echo "Testing PostgreSQL connection..."
 
     psql ^
-      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshan sslmode=require" ^
+      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
       -v ON_ERROR_STOP=1 ^
       -c "SELECT current_database(), current_user;"
   displayName: 'Test PostgreSQL Connection'
