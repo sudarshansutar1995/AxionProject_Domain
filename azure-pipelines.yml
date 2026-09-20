@@ -1,3 +1,4 @@
+
 trigger:
 - main
 
@@ -23,12 +24,11 @@ steps:
     echo "Testing PostgreSQL connection..."
 
     psql ^
-      -h "sudarshan-kubernate.postgres.database.azure.com" ^
-      -p 5432 ^
-      -U "sudarshan" ^
-      -d "axion-db" ^
+      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshan sslmode=require" ^
       -v ON_ERROR_STOP=1 ^
       -c "SELECT current_database(), current_user;"
   displayName: 'Test PostgreSQL Connection'
   env:
     PGPASSWORD: $(POSTGRES_PASSWORD)
+
+
