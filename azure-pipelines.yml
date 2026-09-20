@@ -1,0 +1,25 @@
+pool:
+  name: sudarshancicd
+
+steps:
+
+# 1. Check PostgreSQL client
+- script: |
+    echo "Checking PostgreSQL client..."
+    psql --version
+  displayName: 'Check PostgreSQL Client'
+
+
+# 2. Test PostgreSQL connection
+- script: |
+    echo "Testing PostgreSQL connection..."
+
+    PGPASSWORD="$(Akkalkot@413216)" psql \
+      -h "sudarshan-kubernate.postgres.database.azure.com" \
+      -p 5432 \
+      -U "sudarshan" \
+      -d "axion-db" \
+      -v ON_ERROR_STOP=1 \
+      -c "SELECT current_database(), current_user;"
+  displayName: 'Test PostgreSQL Connection'
+
