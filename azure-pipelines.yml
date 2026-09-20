@@ -1,4 +1,3 @@
-
 trigger:
 - main
 
@@ -31,28 +30,41 @@ steps:
   env:
     PGPASSWORD: $(POSTGRES_PASSWORD)
 
+
 # =========================================================
-# 3. Check Schema File
+# 3. Check Schema Files
 # =========================================================
 - script: |
-    echo "Checking schema file..."
+    echo "Checking schema files..."
     dir "$(Build.SourcesDirectory)\axion-database-schema"
-  displayName: 'Check Schema File'
+  displayName: 'Check Schema Files'
 
 
 # =========================================================
-# 4. Apply Database Schema
+# 4. Apply Extensions Schema
 # =========================================================
 - script: |
-    echo "Applying PostgreSQL schema..."
+    echo "Applying 01-extensions.sql..."
 
     psql ^
       "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
       -v ON_ERROR_STOP=1 ^
-      -f "$(Build.SourcesDirectory)\axion-database-schema\*.sql"
-  displayName: 'Apply PostgreSQL Schema'
+      -f "$(Build.SourcesDirectory)\axion-database-schema\01-extensions.sql"
+  displayName: 'Apply Extensions Schema'
   env:
     PGPASSWORD: $(POSTGRES_PASSWORD)
 
 
+# =========================================================
+# 5. Apply Telemetry Schema
+# =========================================================
+- script: |
+    echo "Applying 02-telemetry.sql..."
 
+    psql ^
+      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
+      -v ON_ERROR_STOP=1 ^
+      -f "$(Build.SourcesDirectory)\axion-database-schema\02-telemetry.sql"
+  displayName: 'Apply Telemetry Schema'
+  env:
+    PGPASSWORD: $(POSTGRES_PASSWORD)
