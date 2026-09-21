@@ -1,102 +1,18 @@
-trigger:
-- main
+trigger: none
 
-pool:
-  name: sudarshancicd
+stages:
+- stage:
+  displayName: DatabaseConnection 
+  jobs:
+  - job:
+    displayName: creatingConnectionPostgre
 
-steps:
-
-# =========================================================
-# 1. Check PostgreSQL Client
-# =========================================================
-- script: |
-    echo "Checking PostgreSQL client..."
-    where psql
-    psql --version
-  displayName: 'Check PostgreSQL Client'
-
-
-# =========================================================
-# 2. Test PostgreSQL Connection
-# =========================================================
-- script: |
-    echo "Testing PostgreSQL connection..."
-
-    psql ^
-      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
-      -v ON_ERROR_STOP=1 ^
-      -c "SELECT current_database(), current_user;"
-  displayName: 'Test PostgreSQL Connection'
-  env:
-    PGPASSWORD: $(POSTGRES_PASSWORD)
-
-
-# =========================================================
-# 3. Check Schema Files
-# =========================================================
-- script: |
-    echo "Checking schema files..."
-    dir "$(Build.SourcesDirectory)\axion-database-schema"
-  displayName: 'Check Schema Files'
-
-
-
-# =========================================================
-# 4. Show Telemetry Table Structure
-# =========================================================
-- script: |
-    echo "===== TELEMETRY TABLE STRUCTURE ====="
-
-    psql ^
-      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
-      -v ON_ERROR_STOP=1 ^
-      -c "\d+ telemetry"
-  displayName: 'Show Telemetry Table Structure'
-  env:
-    PGPASSWORD: $(POSTGRES_PASSWORD)
-
-
-# =========================================================
-# 5. Show Telemetry Columns
-# =========================================================
-- script: |
-    echo "===== TELEMETRY COLUMNS ====="
-
-    psql ^
-      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
-      -v ON_ERROR_STOP=1 ^
-      -c "SELECT ordinal_position, column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_schema='public' AND table_name='telemetry' ORDER BY ordinal_position;"
-  displayName: 'Show Telemetry Columns'
-  env:
-    PGPASSWORD: $(POSTGRES_PASSWORD)
-
-
-# =========================================================
-# 6. Show Telemetry Data
-# =========================================================
-- script: |
-    echo "===== TELEMETRY DATA ====="
-
-    psql ^
-      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
-      -v ON_ERROR_STOP=1 ^
-      -c "SELECT * FROM telemetry LIMIT 20;"
-  displayName: 'Show Telemetry Data'
-  env:
-    PGPASSWORD: $(POSTGRES_PASSWORD)
-
-
-# 
-# =========================================================
-# 7. List All Tables
-# =========================================================
-- script: |
-    echo "===== ALL PUBLIC TABLES ====="
-
-    psql ^
-      "host=sudarshan-kubernate.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require" ^
-      -v ON_ERROR_STOP=1 ^
-      -c "\dt public.*"
-  displayName: 'List PostgreSQL Tables'
-  env:
-    PGPASSWORD: $(POSTGRES_PASSWORD)
+    steps:
+    - task: AzureCLI@3
+      inputs:
+        connectionType: 'azureRM'
+        azureSubscription: 'axion-project-svc-name'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'psql "host=postgresudarshan.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshan sslmode=require"'
+  
