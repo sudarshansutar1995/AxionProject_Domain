@@ -1,0 +1,31 @@
+trigger: none
+
+pool:
+  name: axion-project
+
+stages:
+- stage: DockerBuildAndPush
+  displayName: Docker Build and Push for 
+
+  jobs:
+  - job: DockerBuildAndPush
+    displayName: Docker Build and Push for Telemetray Service 
+
+    steps:
+    - task: Docker@2
+       
+      inputs:
+        containerRegistry: 'acr-sudsutar-svc-name'
+        command: 'login'
+    
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'acr-sudsutar-svc-name'
+        repository: 'DockerBuildAndPush_Telemetray Service'
+        command: 'buildAndPush'
+        Dockerfile: '**/axion-telemetry-query-service/Dockerfile' 
+     
+
+
+
+    
