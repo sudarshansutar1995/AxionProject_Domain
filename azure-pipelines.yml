@@ -14,5 +14,5 @@ stages:
         azureSubscription: 'axion-project-svc-name'
         scriptType: 'ps'
         scriptLocation: 'inlineScript'
-        inlineScript: 'psql "host=postgresudarshan.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshan sslmode=require"'
+        inlineScript: 'psql "postgresudarshan.postgres.database.azure.com port=5432 dbname=axion-db user=sudarshandb sslmode=require"'
   
