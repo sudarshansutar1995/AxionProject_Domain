@@ -17,4 +17,4 @@ stages:
         inlineScript: |
           $env:PGPASSWORD="$(postgres_password)"
           
-          psql -h "postgresudarshan.postgres.database.azure.com" -p 5432 -U "sudarshandb" -d "axiondb" -c "SELECT 1;"
+          psql -h "postgresudarshan.postgres.database.azure.com" -p 5432 -U "sudarshandb" -d "axion-db" -c "SELECT 1;"
