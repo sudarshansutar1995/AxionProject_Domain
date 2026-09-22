@@ -1,0 +1,18 @@
+trigger: none
+
+pool:
+  name: axion-project
+
+stages:
+- stage: DockerBuildAndPush
+  displayName: Docker Build and Push for Ingestion Service
+
+  jobs:
+  - job: DockerBuildAndPush
+    displayName: Docker Build and Push for Ingestion Service
+
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'acr-sudsutar-svc-name'
+        command: 'login'
