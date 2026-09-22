@@ -1,0 +1,29 @@
+trigger: none
+
+pool:
+  name: axion-project
+
+stages:
+- stage: 
+  displayName: Docker Build and Push for axion-ui
+
+  jobs:
+  - job: DockerBuildAndPush
+    displayName: Docker Build and Push for axion-ui
+
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'acr-sudsutar-svc-name'
+        command: 'login'
+    
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'acr-sudsutar-svc-name'
+        repository: 'DockerBuildAndPush_axion_ui'
+        command: 'buildAndPush'
+        Dockerfile: '**/axion-ui/Dockerfile'
+
+
+
+    
