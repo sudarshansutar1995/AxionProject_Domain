@@ -16,3 +16,14 @@ stages:
       inputs:
         containerRegistry: 'acr-sudsutar-svc-name'
         command: 'login'
+    
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'acr-sudsutar-svc-name'
+        repository: 'DockerBuildAndPush_IngestionService'
+        command: 'buildAndPush'
+        Dockerfile: '**/axion-ingestion-service/Dockerfile'
+
+
+
+    
