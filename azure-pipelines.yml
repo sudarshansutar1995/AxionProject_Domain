@@ -33,4 +33,14 @@ stages:
             -U "sudarshandb" `
             -d "axion-db" `
             -f "$(Build.SourcesDirectory)\axion-database-schema\02-telemetry.sql"
-        
+
+    - task: AzureCLI@3
+      inputs:
+        connectionType: 'azureRM'
+        azureSubscription: 'axion-project-svc-name'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          $env:PGPASSWORD = "$(postgres_password)"
+          
+          psql -h "postgresudarshan.postgres.database.azure.com" -p 5432 -U "sudarshandb" -d "axion-db" -c "SELECT table_schema, table_name, column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog','information_schema') ORDER BY table_schema, table_name, ordinal_position;"
