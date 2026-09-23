@@ -16,7 +16,7 @@ class Settings:
        
     "DATABASE_URL",
     "postgresql://sudarshan:Akkalkot@413216@postgresudarshan.postgres.database.azure.com:5432/axion-db?sslmode=require"
-)
+
     )
 
 settings = Settings()
