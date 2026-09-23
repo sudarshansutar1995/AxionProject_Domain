@@ -13,9 +13,10 @@ class Settings:
     # Format: postgresql://<user>:<password>@<host>:<port>/<database>
     # Example: postgresql://postgres:postgres@localhost:5432/axiondb
     DATABASE_URL: str = os.getenv(
-        "DATABASE_URL",
-        #"postgresql://axion_user:P%40ssw01rd%40123@localhost:5432/axion_db",
-         "@postgresudarshan.postgres.database.azure.com:5432/axion-db?sslmode=require"
+       
+    "DATABASE_URL",
+    "postgresql://sudarshan:Akkalkot@413216@postgresudarshan.postgres.database.azure.com:5432/axion-db?sslmode=require"
+)
     )
 
 settings = Settings()
