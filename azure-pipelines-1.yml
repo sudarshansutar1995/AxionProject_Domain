@@ -69,4 +69,4 @@ stages:
           kubernetesServiceConnection: 'kubernate-svc-name'
           manifests: '$(Build.SourcesDirectory)/axion-ingestion-service/Manifest/*'
           containers: |
-            acrsudarshan.azurecr.io/dockerbuildandpush_ingestionservice:$(Build.BuildId)
+            ingestion-pod=acrsudarshan.azurecr.io/dockerbuildandpush_ingestionservice:$(Build.BuildId)
