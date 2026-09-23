@@ -23,7 +23,30 @@ stages:
         repository: 'DockerBuildAndPush_IngestionService'
         command: 'buildAndPush'
         Dockerfile: '**/axion-ingestion-service/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          latest
 
 
+ 
+- stage: DeployToAKS
+  displayName: Deploy Ingestion Service to AKS
+  dependsOn: DockerBuildAndPush
+  condition: succeeded()
+  jobs:
+    - job: Deploy
+      displayName: Deploy Ingestion Service
 
-    
+      steps:
+      - task: KubernetesManifest@1
+        inputs:
+          action: 'deploy'
+          connectionType: 'kubernetesServiceConnection'
+          kubernetesServiceConnection: 'kubernate-svc-name'
+          namespace: 'default'
+          manifests: |
+            Manifest/ingestion-ingress.yaml
+            Manifest/ingestion.yaml
+            Manifest/ingestionservice.yaml
+          containers: |
+            acrsudarshan.azurecr.io/dockerbuildandpush_ingestionservice:latest
