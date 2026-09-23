@@ -42,12 +42,16 @@ stages:
       - checkout: self
 
       - powershell: |
-          Write-Host "Current directory:"
-          Get-Location
+          Write-Host "Build Sources Directory:"
+          Write-Host "$(Build.SourcesDirectory)"
 
-          Write-Host "Manifest files:"
-          Get-ChildItem "$(Build.SourcesDirectory)\Manifest" -File
-        displayName: 'Verify Manifest Files'
+          Write-Host "Repository files:"
+          Get-ChildItem "$(Build.SourcesDirectory)" -Force
+
+          Write-Host "Manifest directory:"
+          Get-ChildItem "$(Build.SourcesDirectory)\Manifest" -Force
+          
+        displayName: 'Verify Repository and Manifest'
       - task: KubernetesManifest@1
         inputs:
           action: 'deploy'
