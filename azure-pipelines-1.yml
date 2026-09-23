@@ -67,11 +67,6 @@ stages:
           action: 'deploy'
           connectionType: 'kubernetesServiceConnection'
           kubernetesServiceConnection: 'kubernate-svc-name'
-          namespace: 'default'
-          manifests: |
-            $(Build.SourcesDirectory)/axion-ingestion-service/Manifest/ingestion-ingress.yaml
-            $(Build.SourcesDirectory)/axion-ingestion-service/Manifest/ingestion.yaml
-            $(Build.SourcesDirectory)/axion-ingestion-service/Manifest/ingestionservice.yaml
-
+          manifests: '$(Build.SourcesDirectory)/axion-ingestion-service/Manifest/*'
           containers: |
             acrsudarshan.azurecr.io/dockerbuildandpush_ingestionservice:$(Build.BuildId)
