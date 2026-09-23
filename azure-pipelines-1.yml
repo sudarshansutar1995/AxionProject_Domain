@@ -39,18 +39,28 @@ stages:
 
       steps:
 
+        # Checkout repository
       - checkout: self
 
+      # Verify repository structure
       - powershell: |
-          Write-Host "Build Sources Directory:"
+          Write-Host "======================================"
+          Write-Host "Build Sources Directory"
+          Write-Host "======================================"
           Write-Host "$(Build.SourcesDirectory)"
 
-          Write-Host "Repository files:"
+          Write-Host ""
+          Write-Host "======================================"
+          Write-Host "Repository files"
+          Write-Host "======================================"
           Get-ChildItem "$(Build.SourcesDirectory)" -Force
 
-          Write-Host "Manifest directory:"
-          Get-ChildItem "$(Build.SourcesDirectory)\Manifest" -Force
-          
+          Write-Host ""
+          Write-Host "======================================"
+          Write-Host "Manifest directory"
+          Write-Host "======================================"
+          Get-ChildItem "$(Build.SourcesDirectory)\axion-ingestion-service\Manifest" -Force
+
         displayName: 'Verify Repository and Manifest'
       - task: KubernetesManifest@1
         inputs:
