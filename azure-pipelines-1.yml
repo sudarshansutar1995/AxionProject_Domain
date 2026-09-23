@@ -59,8 +59,8 @@ stages:
           kubernetesServiceConnection: 'kubernate-svc-name'
           namespace: 'default'
           manifests: |
-            Manifest/ingestion-ingress.yaml
-            Manifest/ingestion.yaml
-            Manifest/ingestionservice.yaml
+              axion-ingestion-service/Manifest/ingestion-ingress.yaml
+              axion-ingestion-service/Manifest/ingestion.yaml
+              axion-ingestion-service/Manifest/ingestionservice.yaml
           containers: |
             acrsudarshan.azurecr.io/dockerbuildandpush_ingestionservice:latest
