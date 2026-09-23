@@ -15,7 +15,7 @@ class Settings:
     DATABASE_URL: str = os.getenv(
        
     "DATABASE_URL",
-    "postgresql://sudarshan:Akkalkot%40413216@postgresudarshan.postgres.database.azure.com:5432/axion-db?sslmode=require"
+    "postgresql://sudarshandb:Akkalkot%40413216@postgresudarshan.postgres.database.azure.com:5432/axion-db?sslmode=require"
 
     )
 
