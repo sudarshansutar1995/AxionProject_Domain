@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name:  ingestion-pod
-        image: sudsutar.azurecr.io/ing:v1
+        image: acrsudarshan.azurecr.io/dockerbuildandpush_ingestionservice
 
         ports:
         - containerPort: 8000
