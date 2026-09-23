@@ -39,10 +39,10 @@ stages:
 
       steps:
 
-        # Checkout repository
       - checkout: self
+        clean: true
+        fetchDepth: 0
 
-      # Verify repository structure
       - powershell: |
           Write-Host "======================================"
           Write-Host "Build Sources Directory"
@@ -51,9 +51,15 @@ stages:
 
           Write-Host ""
           Write-Host "======================================"
-          Write-Host "Repository files"
+          Write-Host "Git Commit"
           Write-Host "======================================"
-          Get-ChildItem "$(Build.SourcesDirectory)" -Force
+          git rev-parse HEAD
+
+          Write-Host ""
+          Write-Host "======================================"
+          Write-Host "Ingestion YAML"
+          Write-Host "======================================"
+          Get-Content "$(Build.SourcesDirectory)\axion-ingestion-service\Manifest\ingestion.yaml"
 
           Write-Host ""
           Write-Host "======================================"
@@ -61,7 +67,7 @@ stages:
           Write-Host "======================================"
           Get-ChildItem "$(Build.SourcesDirectory)\axion-ingestion-service\Manifest" -Force
 
-        displayName: 'Verify Repository and Manifest'
+        displayName: 'Verify Latest Git Checkout'
       - task: KubernetesManifest@1
         inputs:
           action: 'deploy'
